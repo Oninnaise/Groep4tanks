@@ -7,7 +7,8 @@ public class PlayerMove : NetworkBehaviour
 {
     public GameObject bulletPrefab; // Een GameObject met de naam bulletPrefab, wordt als kogel gebruikt
     public GameObject lightPrefab; // Een GameObject met de naam lightPrefab, wordt als schotlicht gebruikt
-    public int rotatespeed = 120, speed = 5; // Rotatespeed en Movespeed
+    public GameObject soundPrefab; // Een GameObject met de naam soundPrefab, wordt als schot geluid gebruikt
+    public int rotatespeed = 150, speed = 9; // Rotatespeed en Movespeed
     public float fireinterval = 1, timestamp; // Float voor Fireinterval (niet gebruikt) en Timestamp
     public string type;
     private bool moveup, movedown, moveleft, moveright; // Of de knoppen in gebruik zijn
@@ -93,21 +94,44 @@ public class PlayerMove : NetworkBehaviour
              bulletPrefab,
              transform.position - transform.forward - transform.forward ,
              Quaternion.identity); // Maak een instantie van de bulletprefab voor de tank
-        bullet.GetComponent<Rigidbody>().velocity = -transform.forward * 10; // De velocity van de Rigidbody van de tank (doet alle physics) is forward * 10 (10)
+        bullet.GetComponent<Rigidbody>().velocity = -transform.forward * 15; // De velocity van de Rigidbody van de tank (doet alle physics) is forward * 10 (10)
         bullet.GetComponent<Rigidbody>().transform.rotation = Quaternion.LookRotation(bullet.GetComponent<Rigidbody>().velocity); // Roteer de bullet naar de richting waar het geschoten wordt
+        bullet.GetComponent<Bullet>().shooter = transform;
 
         var light = (GameObject)Instantiate(
             lightPrefab,
-            transform.position - transform.forward,
+            transform.position - transform.forward - transform.forward,
             Quaternion.identity); // Maak een instantie aan van de lightPrefab
+
+        var sound = (GameObject)Instantiate(
+    soundPrefab,
+    transform.position - transform.forward - transform.forward,
+    Quaternion.identity); // Maak een instantie aan van de soundPrefab
 
         // spawn de kogel op elke client
         NetworkServer.Spawn(bullet); // Spawn
         NetworkServer.Spawn(light); // Spawn
+        NetworkServer.Spawn(sound); // Spawn
         Destroy(bullet, 2.0f); // Destroy na 2 seconden
-        Destroy(light, 0.1f); // Destroy na 0.1 seconde
+        Destroy(light, 0.15f); // Destroy na 0.15 seconde
+        Destroy(sound, 0.6f); //Destroy na 0.6 seconde
+    }
+    [Server] //Wordt alleen op de server aangeroepen
+    public void AddScore()
+    {
+        RpcAddScore();
     }
 
+    [ClientRpc]  // Zorgt ervoor dat RpcRespawn() op de server gecallt wordt maar op alle client uitgevoerd wordt
+    void RpcAddScore()
+    {
+        if (isLocalPlayer) // Checkt of het localplayer is
+        {
+            score += 5;
+            GameObject tempObject = GameObject.Find("Score"); // Vind de gameObject "Score" (is een child van Canvas)
+            tempObject.GetComponent<Score>().DisplayScore(score); //Zoek de Score script en run DisplayScore(score)
+        }
+    }
     void Update() // Wordt elke frame aangeroepen
     {
         var transAmount = speed * Time.deltaTime; // deltaTime zorgt ervoor dat de speed hetzelfde is op elke framerate

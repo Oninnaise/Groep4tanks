@@ -15,7 +15,7 @@ public class Combat : NetworkBehaviour
     [SyncVar] // Dit wordt met iedereen gesynct, zorgt ervoor dat iedereen dezelfde waarde ziet
     public int health = maxHealth;
 
-    public void TakeDamage(int amount) 
+    public void TakeDamage(int amount, Transform from) 
     {
         if (!isServer) // Zorgt ervoor dat de script alleen op de server geroepen wordt (wordt dus 1x gedaan en kan niet met een packet tracer extra malen doorgestuurd worden)
             return;
@@ -26,6 +26,7 @@ public class Combat : NetworkBehaviour
             health = maxHealth;
 
             RpcRespawn();
+            from.GetComponent<PlayerMove>().AddScore(); // Geef score aan de winnaar
         }
         if (health > 100) // Zorgt ervoor dat health niet boven 100 kan komen d.m.v powerups
         {

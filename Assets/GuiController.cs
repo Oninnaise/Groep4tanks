@@ -5,7 +5,7 @@ using UnityEngine;
 public class GuiController : MonoBehaviour
 {
 
-    public GameObject upButton, leftButton, rightButton, downButton, fireButton; //Aangeven om welke gameObjects het gaat. In deze geval de Android controls
+    public GameObject upButton, leftButton, rightButton, downButton, fireButton, Score; //Aangeven om welke gameObjects het gaat. In deze geval de Android controls
 
     public static GuiController singleton = null;
 

@@ -10,7 +10,7 @@ public class HealthPickup : MonoBehaviour
         if (other.gameObject.tag == "Player") //Als het object wat de trigger geraakt heeft een tag "Player" heeft
         {
             var combat = other.GetComponent<Combat>(); // combat is een variable met de script "Combat" van de gameObject
-            combat.TakeDamage(-40); // Roep de TakeDamage functie uit met -40 damage van de "Combat" script
+            combat.TakeDamage(-40, null); // Roep de TakeDamage functie uit met -40 damage van de "Combat" script
             Destroy(this.gameObject); // Verwijder de gameObject ---- TODO respawn functie
         }
     }
