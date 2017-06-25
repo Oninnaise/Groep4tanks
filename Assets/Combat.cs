@@ -3,13 +3,46 @@ using UnityEngine.Networking;
 
 public class Combat : NetworkBehaviour
 {
+
     public const int maxHealth = 100; // Maak een int met constante waarde (moet aangepast worden als je een maxHealth powerup wilt) van 100
+    public float explosionRadius = 100.0f;
+    public float explosionPower = 100.0f;
+    public bool destroyOnDeath;
+    public float timer;
+    public int waitingTime = 3;
+    public Vector3[] positions;
+    [SyncVar]
+    public bool waitingrespawn = false;
     private NetworkStartPosition[] spawnPoints; // Maak een array NetworkStartPositions (spawn points)
     void Start() // Start wordt aangeroepen zodra de script aangezet wordt
     {
         if (isLocalPlayer) // isLocalPlayer is een Unity netwerk boolean waarmee je kunt aangeven of iets van een speler is of niet. De Player prefab heeft een Network Identity script met Local Player Authority aanstaan, dat zit met elkaar verbonden
         {
             spawnPoints = FindObjectsOfType<NetworkStartPosition>(); // Unity doorzoekt alle gameObjects met de NetworkStartPosition script
+            positions = new Vector3[transform.childCount];
+            var count = 0;
+
+            foreach (Transform child in transform)
+            {
+                positions[count] = child.position;
+                count++;
+            }
+        }
+    }
+
+    void Update()
+    {
+        if (waitingrespawn == true)
+        {
+            timer += Time.deltaTime;
+            if (timer > waitingTime)
+            {
+                waitingrespawn = false;
+
+
+
+                timer = 0;
+            }
         }
     }
     [SyncVar] // Dit wordt met iedereen gesynct, zorgt ervoor dat iedereen dezelfde waarde ziet
@@ -23,14 +56,47 @@ public class Combat : NetworkBehaviour
         health -= amount;
         if (health <= 0)
         {
-            health = maxHealth;
 
-            RpcRespawn();
-            from.GetComponent<PlayerMove>().AddScore(); // Geef score aan de winnaar
+            if (destroyOnDeath)
+            {
+                foreach (Transform child in transform)
+                {
+                    child.GetComponent<Rigidbody>().isKinematic = false;
+                    child.GetComponent<Rigidbody>().AddExplosionForce(explosionPower, transform.position, explosionRadius);
+                    GetComponent<Collider>().isTrigger = true;
+                }
+
+            }
+            else
+            {
+
+                from.GetComponent<PlayerMove>().AddScore(); // Geef score aan de winnaar
+                waitingrespawn = true;
+                CmdOnRespawn();
+                    RpcRespawn();
+
+            }
         }
         if (health > 100) // Zorgt ervoor dat health niet boven 100 kan komen d.m.v powerups
         {
             health = maxHealth; 
+        }
+    }
+
+    [Command]
+    void CmdOnRespawn()
+    {
+        RpcExplode();
+    }
+    [ClientRpc]
+    void RpcExplode()
+    {
+        foreach (Transform child in transform)
+        {
+            child.GetComponent<MeshCollider>().enabled = true;
+            child.GetComponent<Rigidbody>().isKinematic = false;
+            child.GetComponent<Rigidbody>().AddExplosionForce(explosionPower, transform.position, explosionRadius);
+
         }
     }
 
@@ -45,8 +111,12 @@ public class Combat : NetworkBehaviour
             {
                 spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position; // Zet de spawnpoint op de positie van een van de spawnpoints (Pos1, Pos2, Pos3, Pos4 in Unity)
             }
+            var count = 0;
 
+            health = maxHealth;
             transform.position = spawnPoint; // Speler position is de position van de spawnpoint
         }
     }
+
 }
+

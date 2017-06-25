@@ -122,7 +122,7 @@ public class PlayerMove : NetworkBehaviour
         RpcAddScore();
     }
 
-    [ClientRpc]  // Zorgt ervoor dat RpcRespawn() op de server gecallt wordt maar op alle client uitgevoerd wordt
+    [ClientRpc]  // Zorgt ervoor dat RpcAddScore() op de server gecallt wordt maar op alle client uitgevoerd wordt
     void RpcAddScore()
     {
         if (isLocalPlayer) // Checkt of het localplayer is

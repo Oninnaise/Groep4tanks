@@ -6,6 +6,7 @@ public class Health : MonoBehaviour
     GUIStyle healthStyle;
     GUIStyle backStyle;
     Combat combat; //combat is een variable die de script "Combat" van een gameObject selecteerd
+    public bool showHP;
 
 
     void Awake()
@@ -15,19 +16,23 @@ public class Health : MonoBehaviour
 
     void OnGUI()
     {
-        InitStyles();
+        if (showHP)
+        {
+            InitStyles();
+            Vector3 pos = Camera.main.WorldToScreenPoint(transform.position); // Set locatie van de healthbars
 
-        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position); // Set locatie van de healthbars
+            // Achtergrond tekenen
+            GUI.color = Color.grey;
+            GUI.backgroundColor = Color.grey;
+            GUI.Box(new Rect(pos.x - 26, Screen.height - pos.y + 20, Combat.maxHealth / 2, 7), ".", backStyle);
 
-        // Achtergrond tekenen
-        GUI.color = Color.grey;
-        GUI.backgroundColor = Color.grey;
-        GUI.Box(new Rect(pos.x - 26, Screen.height - pos.y + 20, Combat.maxHealth / 2, 7), ".", backStyle);
+            // Healthbar tekenen
+            GUI.color = Color.green;
+            GUI.backgroundColor = Color.green;
+            GUI.Box(new Rect(pos.x - 25, Screen.height - pos.y + 21, combat.health / 2, 5), ".", healthStyle);
+        }
 
-        // Healthbar tekenen
-        GUI.color = Color.green;
-        GUI.backgroundColor = Color.green;
-        GUI.Box(new Rect(pos.x - 25, Screen.height - pos.y + 21, combat.health / 2, 5), ".", healthStyle);
+
     }
 
     void InitStyles()
