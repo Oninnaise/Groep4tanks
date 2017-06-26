@@ -28,6 +28,7 @@ namespace Prototype.NetworkLobby
         public RectTransform lobbyPanel;
         public RectTransform InstructionsPanel;
         public RectTransform InstructionsPanelPhone;
+        public RectTransform SettingsPanel;
 
         public LobbyInfoPanel infoPanel;
         public LobbyCountdownPanel countdownPanel;
@@ -182,7 +183,7 @@ namespace Prototype.NetworkLobby
         {
             ChangeTo(mainMenuPanel);
         }
-        
+
         public void ShowInstructions()
         {
             if (SystemInfo.deviceType == DeviceType.Handheld)
@@ -193,6 +194,11 @@ namespace Prototype.NetworkLobby
             {
                 ChangeTo(InstructionsPanel);
             }
+        }
+
+       public void ShowSettings()
+        {
+                ChangeTo(SettingsPanel);
 
             backDelegate = SimpleBackClbk;
         }

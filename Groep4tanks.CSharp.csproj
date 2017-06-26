@@ -96,6 +96,7 @@
     <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyTopPanel.cs" />
     <Compile Include="Assets\PlayerMove.cs" />
     <Compile Include="Assets\Score.cs" />
+    <Compile Include="Assets\SettingsInit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\OpenSans\License!.txt" />

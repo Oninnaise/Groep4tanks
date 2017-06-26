@@ -25,6 +25,10 @@ namespace Prototype.NetworkLobby
         {
             lobbyManager.ShowInstructions();
         }
+        public void OnClickSettings()
+        {
+            lobbyManager.ShowSettings();
+        }
         public void OnClickHost()
         {
             lobbyManager.StartHost();
