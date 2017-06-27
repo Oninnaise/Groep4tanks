@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 public class PlayerMove : NetworkBehaviour
 {
@@ -9,8 +10,10 @@ public class PlayerMove : NetworkBehaviour
     public GameObject lightPrefab; // Een GameObject met de naam lightPrefab, wordt als schotlicht gebruikt
     public GameObject soundPrefab; // Een GameObject met de naam soundPrefab, wordt als schot geluid gebruikt
     public int rotatespeed = 150, speed = 9; // Rotatespeed en Movespeed
-    public float fireinterval = 1, timestamp; // Float voor Fireinterval (niet gebruikt) en Timestamp
+    public float timestamp; // Float voor Fireinterval (niet gebruikt) en Timestamp
     public string type;
+    [SyncVar]
+    public float cooldown = 1;
     private bool moveup, movedown, moveleft, moveright; // Of de knoppen in gebruik zijn
     [SyncVar] // Sync deze var naar alle spelers
     public string PlayerName = "";
@@ -83,10 +86,11 @@ public class PlayerMove : NetworkBehaviour
     {
         if (timestamp <= Time.time) // Als de tijd onder de huidige tijd is
         {
-            timestamp = Time.time + 1; // timestamp is tijd + 1 sec
+            timestamp = Time.time + cooldown; // timestamp is tijd + 1 sec
             CmdFire(); //Schiet
         }
     }
+
     [Command] //Command wordt op de server gedraaid
     void CmdFire()
     {
@@ -120,6 +124,23 @@ public class PlayerMove : NetworkBehaviour
     public void AddScore()
     {
         RpcAddScore();
+    }
+
+    [Server]
+    public void RapidFire(int duration)
+    {
+        RpcRapidFire(duration);
+    }
+
+    [ClientRpc]
+    void RpcRapidFire(int duration)
+    {
+        if (isLocalPlayer) // Checkt of het localplayer is
+        {
+            cooldown = 0.5f;
+            StartCoroutine(WFSCooldown(duration));
+            
+        }
     }
 
     [ClientRpc]  // Zorgt ervoor dat RpcAddScore() op de server gecallt wordt maar op alle client uitgevoerd wordt
@@ -157,7 +178,7 @@ public class PlayerMove : NetworkBehaviour
         }
         if (Input.GetButton("Fire1") && timestamp <= Time.time) // Als er op Fire1 gedrukt wordt en de timestamp onder de huidige tijd is
         {
-            timestamp = Time.time + 1; // timestamp is tijd + 1 sec
+            timestamp = Time.time + cooldown; // timestamp is tijd + 1 sec
             CmdFire();
         }
     }
@@ -192,5 +213,10 @@ public class PlayerMove : NetworkBehaviour
     public void MoveDownStop()
     {
         movedown = false;
+    }
+    IEnumerator WFSCooldown(int duration)
+    {
+        yield return new WaitForSeconds(duration);
+        cooldown = 1.0f;
     }
 }

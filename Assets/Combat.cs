@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using System.Collections;
 
 public class Combat : NetworkBehaviour
 {
@@ -71,9 +72,11 @@ public class Combat : NetworkBehaviour
             {
 
                 from.GetComponent<PlayerMove>().AddScore(); // Geef score aan de winnaar
-                waitingrespawn = true;
-                CmdOnRespawn();
-                    RpcRespawn();
+               // waitingrespawn = true;
+                //RpcExplode();
+                //RpcReset();
+                RpcRespawn();
+                health = maxHealth;
 
             }
         }
@@ -88,15 +91,43 @@ public class Combat : NetworkBehaviour
     {
         RpcExplode();
     }
+
+    [Command]
+    void CmdOnReset()
+    {
+        RpcReset();
+    }
+
+    [ClientRpc]
+    void RpcReset()
+    {
+        if (isLocalPlayer)
+        {
+            foreach (Transform child in transform)
+            {
+                child.GetComponent<MeshCollider>().enabled = false;
+                child.GetComponent<Rigidbody>().isKinematic = true;
+            }
+            var count = 0;
+            foreach (Transform child in transform)
+            {
+                child.position = positions[count];
+                count++;
+            }
+        }
+    }
     [ClientRpc]
     void RpcExplode()
     {
-        foreach (Transform child in transform)
+        if (isLocalPlayer)
         {
-            child.GetComponent<MeshCollider>().enabled = true;
-            child.GetComponent<Rigidbody>().isKinematic = false;
-            child.GetComponent<Rigidbody>().AddExplosionForce(explosionPower, transform.position, explosionRadius);
+            foreach (Transform child in transform)
+            {
+                child.GetComponent<MeshCollider>().enabled = true;
+                child.GetComponent<Rigidbody>().isKinematic = false;
+                child.GetComponent<Rigidbody>().AddExplosionForce(explosionPower, transform.position, explosionRadius);
 
+            }
         }
     }
 
@@ -111,9 +142,7 @@ public class Combat : NetworkBehaviour
             {
                 spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position; // Zet de spawnpoint op de positie van een van de spawnpoints (Pos1, Pos2, Pos3, Pos4 in Unity)
             }
-            var count = 0;
-
-            health = maxHealth;
+            
             transform.position = spawnPoint; // Speler position is de position van de spawnpoint
         }
     }
