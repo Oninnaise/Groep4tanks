@@ -78,13 +78,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Bullet.cs" />
-    <Compile Include="Assets\CameraFollow.cs" />
-    <Compile Include="Assets\Combat.cs" />
-    <Compile Include="Assets\Explodetest.cs" />
-    <Compile Include="Assets\GuiController.cs" />
-    <Compile Include="Assets\Health.cs" />
-    <Compile Include="Assets\HealthPickup.cs" />
     <Compile Include="Assets\Lobby\Scripts\EventSystemChecker.cs" />
     <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyCountdownPanel.cs" />
     <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyHook.cs" />
@@ -94,9 +87,16 @@
     <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyPlayer.cs" />
     <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyPlayerList.cs" />
     <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyTopPanel.cs" />
-    <Compile Include="Assets\PlayerMove.cs" />
-    <Compile Include="Assets\Score.cs" />
-    <Compile Include="Assets\SettingsInit.cs" />
+    <Compile Include="Assets\Powerups\Scripts\HealthPickup.cs" />
+    <Compile Include="Assets\Powerups\Scripts\RapidFirePickup.cs" />
+    <Compile Include="Assets\Scripts\Camera\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\Guns\Bullet.cs" />
+    <Compile Include="Assets\Scripts\Player\Combat.cs" />
+    <Compile Include="Assets\Scripts\Player\Health.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerMove.cs" />
+    <Compile Include="Assets\Scripts\User Interface\GuiController.cs" />
+    <Compile Include="Assets\Scripts\User Interface\Score.cs" />
+    <Compile Include="Assets\Scripts\User Interface\SettingsInit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\OpenSans\License!.txt" />

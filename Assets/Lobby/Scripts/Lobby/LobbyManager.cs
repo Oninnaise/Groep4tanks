@@ -196,6 +196,11 @@ namespace Prototype.NetworkLobby
             }
         }
 
+        public void Quit()
+        {
+            Application.Quit();
+        }
+
        public void ShowSettings()
         {
                 ChangeTo(SettingsPanel);
