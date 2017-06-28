@@ -15,7 +15,8 @@ public class Health : MonoBehaviour
     }
 
     void OnGUI()
-    {
+    { if (combat.health <= 0)
+            showHP = false; 
         if (showHP)
         {
             InitStyles();
