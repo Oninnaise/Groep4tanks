@@ -10,22 +10,22 @@ public class SettingsInit : MonoBehaviour
     public AudioMixer soundMixer;
 
 
-    public void setMusicLevel(float mvalue)
+    public void setMusicLevel(float mvalue) // Aanpassen volume muziek
     {
         musicMixer.SetFloat("MusicVolume", mvalue);
     }
 
-    public void setSoundLevel(float svalue)
+    public void setSoundLevel(float svalue) // Aanpassen volume geluid
     {
         musicMixer.SetFloat("SoundVolume", svalue);
     }
 
-    public void ToggleFullScreen()
+    public void ToggleFullScreen() // Wisselen tussen full screen en windowed
     {
         if (Screen.fullScreen = !Screen.fullScreen)
         {
             Screen.fullScreen = Screen.fullScreen;
-            Screen.SetResolution(Screen.width, Screen.height, true, 60);
+            Screen.SetResolution(Screen.width, Screen.height, true, 60); // width height framerate
         }
         else
         {

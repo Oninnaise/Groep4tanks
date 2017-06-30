@@ -60,13 +60,7 @@ public class Combat : NetworkBehaviour
 
             if (destroyOnDeath)
             {
-                foreach (Transform child in transform)
-                {
-                    child.GetComponent<Rigidbody>().isKinematic = false;
-                    child.GetComponent<Rigidbody>().AddExplosionForce(explosionPower, transform.position, explosionRadius);
-                    GetComponent<Collider>().isTrigger = true;
-                }
-
+                CmdEnvironmentDestroy();
             }
             else
             {
@@ -87,6 +81,12 @@ public class Combat : NetworkBehaviour
     }
 
     [Command]
+    void CmdEnvironmentDestroy()
+    {
+        RpcEnvironmentExplode();
+    }
+
+    [Command]
     void CmdOnRespawn()
     {
         RpcExplode();
@@ -96,6 +96,17 @@ public class Combat : NetworkBehaviour
     void CmdOnReset()
     {
         RpcReset();
+    }
+
+    [ClientRpc]
+    void RpcEnvironmentExplode()
+    {
+        foreach (Transform child in transform)
+        {
+            child.GetComponent<Rigidbody>().isKinematic = false;
+            child.GetComponent<Rigidbody>().AddExplosionForce(explosionPower, transform.position, explosionRadius);
+            GetComponent<Collider>().isTrigger = true;
+        }
     }
 
     [ClientRpc]

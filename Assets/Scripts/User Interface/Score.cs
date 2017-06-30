@@ -6,14 +6,11 @@ public class Score : MonoBehaviour {
     public Text scoreText;
 
 	void Start () {
-        scoreText = transform.Find("ScoreNUM").GetComponent<Text>();
+        scoreText = transform.Find("ScoreNUM").GetComponent<Text>(); // Zoek tekstcomponent
     }
     public void DisplayScore(int score)
     {
-        scoreText.text = string.Format(score.ToString());
+        scoreText.text = string.Format(score.ToString()); // Parste Int naar String en plaats waarde in variable
     }
 
-    void Update () {
-		
-	}
 }

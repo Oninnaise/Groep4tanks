@@ -18,6 +18,8 @@ public class PlayerMove : NetworkBehaviour
     [SyncVar] // Sync deze var naar alle spelers
     public string PlayerName = "";
     [SyncVar] // Sync deze var naar alle spelers
+    public Color color;
+    [SyncVar] // Sync deze var naar alle spelers
     public int score;
     public override void OnStartLocalPlayer() //Dit wordt uitgeroepen zodra de Prefab van de lokale speler spawnt
     {
@@ -65,19 +67,10 @@ public class PlayerMove : NetworkBehaviour
         fireButton.triggers.Add(entryfire);
         Debug.Log(SystemInfo.deviceType); // Geeft een debug log in de Unity Console met de deviceType
 
-        foreach (Renderer r in GetComponentsInChildren<Renderer>())
-        {
-            /*
-            if (SystemInfo.deviceType == DeviceType.Handheld)
-            {
-              //  r.material.color = Color.red;
-            }
-            if (SystemInfo.deviceType == DeviceType.Desktop)
-            {
-              //  r.material.color = Color.green;
-            }
-            */
-        }
+        Renderer[] rends = GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in rends)
+            r.material.color = color;
+
         Camera.main.GetComponent<CameraFollow>().setTarget(gameObject.transform); // Pak de script "CameraFollow" van de Camera en zet de Transform van de speler gameObject als target
     }
 

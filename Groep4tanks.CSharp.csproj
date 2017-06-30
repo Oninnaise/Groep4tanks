@@ -78,19 +78,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Lobby\Scripts\EventSystemChecker.cs" />
-    <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyCountdownPanel.cs" />
-    <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyHook.cs" />
-    <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyInfoPanel.cs" />
-    <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyMainMenu.cs" />
-    <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyManager.cs" />
-    <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyPlayer.cs" />
-    <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyPlayerList.cs" />
-    <Compile Include="Assets\Lobby\Scripts\Lobby\LobbyTopPanel.cs" />
     <Compile Include="Assets\Powerups\Scripts\HealthPickup.cs" />
     <Compile Include="Assets\Powerups\Scripts\RapidFirePickup.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Guns\Bullet.cs" />
+    <Compile Include="Assets\Scripts\Lobby\EventSystemChecker.cs" />
+    <Compile Include="Assets\Scripts\Lobby\LobbyCountdownPanel.cs" />
+    <Compile Include="Assets\Scripts\Lobby\LobbyHook.cs" />
+    <Compile Include="Assets\Scripts\Lobby\LobbyInfoPanel.cs" />
+    <Compile Include="Assets\Scripts\Lobby\LobbyMainMenu.cs" />
+    <Compile Include="Assets\Scripts\Lobby\LobbyManager.cs" />
+    <Compile Include="Assets\Scripts\Lobby\LobbyPlayer.cs" />
+    <Compile Include="Assets\Scripts\Lobby\LobbyPlayerList.cs" />
+    <Compile Include="Assets\Scripts\Lobby\LobbyTopPanel.cs" />
+    <Compile Include="Assets\Scripts\Lobby\NetworkLobbyHook.cs" />
     <Compile Include="Assets\Scripts\Player\Combat.cs" />
     <Compile Include="Assets\Scripts\Player\Health.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMove.cs" />
@@ -100,8 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\OpenSans\License!.txt" />
-    <None Include="Assets\Lobby\Documentation.txt" />
-    <None Include="Assets\Lobby\Instruction.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
