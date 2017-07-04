@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Powerups\Scripts\HealthPickup.cs" />
+    <Compile Include="Assets\Powerups\Scripts\PowerupMain.cs" />
     <Compile Include="Assets\Powerups\Scripts\RapidFirePickup.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Guns\Bullet.cs" />

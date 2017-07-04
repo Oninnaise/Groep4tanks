@@ -21,8 +21,10 @@ public class PlayerMove : NetworkBehaviour
     public Color color;
     [SyncVar] // Sync deze var naar alle spelers
     public int score;
+    public bool isPlayer = false;
     public override void OnStartLocalPlayer() //Dit wordt uitgeroepen zodra de Prefab van de lokale speler spawnt
     {
+
         // Hele on-nette manier om de android knoppen hun triggers te geven (on push en on release)
         EventTrigger upButton = GuiController.singleton.upButton.GetComponent<EventTrigger>();
         EventTrigger leftButton = GuiController.singleton.leftButton.GetComponent<EventTrigger>();
@@ -66,12 +68,16 @@ public class PlayerMove : NetworkBehaviour
         downButton.triggers.Add(entrydownstop);
         fireButton.triggers.Add(entryfire);
         Debug.Log(SystemInfo.deviceType); // Geeft een debug log in de Unity Console met de deviceType
-
-        Renderer[] rends = GetComponentsInChildren<Renderer>();
-        foreach (Renderer r in rends)
-            r.material.color = color;
-
         Camera.main.GetComponent<CameraFollow>().setTarget(gameObject.transform); // Pak de script "CameraFollow" van de Camera en zet de Transform van de speler gameObject als target
+    }
+    void Start()
+    {
+        if (isPlayer)
+        {
+            Renderer[] rends = GetComponentsInChildren<Renderer>();
+            foreach (Renderer r in rends)
+                r.material.color = color;
+        }
     }
 
     [Command] //Wordt alleen op de server uitgevoerd
@@ -82,6 +88,26 @@ public class PlayerMove : NetworkBehaviour
             timestamp = Time.time + cooldown; // timestamp is tijd + 1 sec
             CmdFire(); //Schiet
         }
+    }
+
+    [ClientRpc]
+    void RpcColor(Color tankcolor)
+    {
+        if (!isLocalPlayer)
+        {
+            Renderer[] rends = GetComponentsInChildren<Renderer>();
+            foreach (Renderer r in rends)
+                r.material.color = tankcolor;
+        }
+    }
+
+    [Command]
+    void CmdColor(Color tankcolor)
+    {
+        Renderer[] rends = GetComponentsInChildren<Renderer>();
+        foreach (Renderer r in rends)
+            r.material.color = tankcolor;
+        RpcColor(color);
     }
 
     [Command] //Command wordt op de server gedraaid

@@ -190,6 +190,7 @@ namespace Prototype.NetworkLobby
             {
                 ChangeTo(InstructionsPanel);
             }
+            backDelegate = SimpleBackClbk;
         }
 
         public void Quit() // Quit
